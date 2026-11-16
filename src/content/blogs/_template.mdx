@@ -1,0 +1,49 @@
+---
+# HOW TO ADD AN ARTICLE
+#
+# 1. Copy this file to src/content/journal/<your-slug>.mdx.
+#    The file name becomes the URL: lowercase, kebab-case, no spaces.
+# 2. Fill in the fields below. Files that start with "_" are never published.
+# 3. Leave publishedAt empty until the article is approved. Do not invent a date.
+# 4. Set status to "published" only when the article is ready. A published
+#    article must have a publishedAt date.
+# 5. Never set sample: true on a published article. Sample content is for
+#    testing only and the build refuses it.
+
+title: "Article title"
+summary: "One or two sentences that say what the reader will learn."
+category: architecture          # architecture | frontend | backend | data | tooling
+status: draft                   # draft | published
+tags: []                        # short lowercase words, used in search
+publishedAt:                    # YYYY-MM-DD, required when published
+updatedAt:                      # YYYY-MM-DD, optional, must not precede publishedAt
+related: []                     # slugs of other published articles
+---
+
+## Context
+
+Describe the problem in plain language. Keep paragraphs short.
+
+## The decision
+
+Use components for structure. Code and diagrams are provided by the page.
+
+```ts
+export function example(value: number): number {
+  return value * 2;
+}
+```
+
+<Callout tone="note">
+  Notes and cautions are text labels, not color alone.
+</Callout>
+
+<FlowDiagram
+  title="Request path"
+  description="How a request moves through the system."
+  steps={["Client", "API", "Service", "Database"]}
+/>
+
+### Trade-offs
+
+Each section heading (## or ###) appears in the table of contents automatically.

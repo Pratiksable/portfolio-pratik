@@ -1,26 +1,247 @@
 @import "tailwindcss";
 
+/*
+ * Design tokens. Components use the semantic names only (surface, text,
+ * accent, ...). Values here are a first pass; revisit them at token review.
+ */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --surface: #f5f6f4;
+  --surface-raised: #ffffff;
+  --surface-inset: #e9ecea;
+  --text: #14171a;
+  --text-muted: #4d5661;
+  --text-inverse: #f5f6f4;
+  --border: #c5ccd2;
+  --accent: #0b6964;
+  --accent-strong: #074f4b;
+  --focus: #0b6964;
+  --status-practiced: #0b6964;
+  --status-growing: #7d5300;
+  --grid-line: rgb(20 23 26 / 0.07);
+  --glow: rgb(255 214 170 / 0.10);
+  --star-strength: 0.12;
+  --sun-strength: 1;
+  --toggle-track: linear-gradient(90deg, #cfe6ff 0%, #fbe0b6 100%);
+  --motion-enter: 900ms;
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  :root:not([data-theme="light"]) {
+    --surface: #1f1f1f;
+    --surface-raised: #2a2a2a;
+    --surface-inset: #333333;
+    --text: #f2f2f2;
+    --text-muted: #b8b8b8;
+    --text-inverse: #1f1f1f;
+    --border: #4a4a4a;
+    --accent: #5ccfc4;
+    --accent-strong: #8be0d8;
+    --focus: #5ccfc4;
+    --status-practiced: #5ccfc4;
+    --status-growing: #e0b25c;
+    --grid-line: rgb(242 242 242 / 0.07);
+    --glow: rgb(120 160 230 / 0.13);
+    --star-strength: 1;
+    --sun-strength: 0;
+    --toggle-track: linear-gradient(90deg, #1d2740 0%, #0b0f1c 100%);
   }
 }
 
+:root[data-theme="dark"] {
+  --surface: #1f1f1f;
+  --surface-raised: #2a2a2a;
+  --surface-inset: #333333;
+  --text: #f2f2f2;
+  --text-muted: #b8b8b8;
+  --text-inverse: #1f1f1f;
+  --border: #4a4a4a;
+  --accent: #5ccfc4;
+  --accent-strong: #8be0d8;
+  --focus: #5ccfc4;
+  --status-practiced: #5ccfc4;
+  --status-growing: #e0b25c;
+  --grid-line: rgb(242 242 242 / 0.07);
+  --glow: rgb(120 160 230 / 0.13);
+  --star-strength: 1;
+  --sun-strength: 0;
+  --toggle-track: linear-gradient(90deg, #1d2740 0%, #0b0f1c 100%);
+}
+
+@theme inline {
+  --color-surface: var(--surface);
+  --color-surface-raised: var(--surface-raised);
+  --color-surface-inset: var(--surface-inset);
+  --color-text: var(--text);
+  --color-text-muted: var(--text-muted);
+  --color-text-inverse: var(--text-inverse);
+  --color-border: var(--border);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-focus: var(--focus);
+  --color-status-practiced: var(--status-practiced);
+  --color-status-growing: var(--status-growing);
+
+  --font-display: var(--font-fraunces), ui-serif, Georgia, serif;
+  --font-sans: var(--font-plex-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-plex-mono), ui-monospace, monospace;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 5rem;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--surface);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--text-inverse);
+}
+
+:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+a {
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.2em;
+}
+
+/* One authored moment: the opening statement settles in once on load. */
+@keyframes settle-in {
+  from {
+    opacity: 0;
+    transform: translateY(0.75rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.settle-in {
+  animation: settle-in var(--motion-enter) cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.settle-in-delayed {
+  animation: settle-in var(--motion-enter) cubic-bezier(0.16, 1, 0.3, 1) 150ms both;
+}
+
+.blueprint-grid {
+  background-image:
+    linear-gradient(var(--grid-line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-line) 1px, transparent 1px);
+  background-size: 2rem 2rem;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  .settle-in,
+  .settle-in-delayed {
+    animation: none;
+  }
+
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* Inline code inside articles. Block code is styled by its own block. */
+.journal-body :not(pre) > code {
+  border-radius: 0.25rem;
+  background: var(--surface-inset);
+  padding: 0.1em 0.35em;
+  font-family: var(--font-mono);
+  font-size: 0.9em;
+}
+
+/* Section reveal: blocks below the fold rise in once, when they arrive. */
+[data-reveal="pending"] {
+  opacity: 0;
+  transform: translateY(1.5rem);
+}
+
+[data-reveal] {
+  transition:
+    opacity 800ms cubic-bezier(0.16, 1, 0.3, 1),
+    transform 800ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+[data-reveal="in"] {
+  opacity: 1;
+  transform: none;
+}
+
+/* Spotlight: a soft light that follows the mouse across the hero. */
+.spotlight {
+  position: relative;
+  overflow: hidden;
+}
+
+.spotlight::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(
+    420px circle at var(--mx, -999px) var(--my, -999px),
+    color-mix(in srgb, var(--accent) 14%, transparent),
+    transparent 70%
+  );
+}
+
+.spotlight > .spotlight-content {
+  position: relative;
+}
+
+/* Current-section underline draws in when the section changes. */
+@keyframes underline-in {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+.nav-underline {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -0.45rem;
+  height: 2px;
+  border-radius: 2px;
+  background: var(--accent);
+  transform-origin: left;
+  animation: underline-in 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes pill-in {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.nav-pill {
+  animation: pill-in 320ms cubic-bezier(0.16, 1, 0.3, 1) both;
 }

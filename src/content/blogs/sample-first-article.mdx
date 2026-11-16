@@ -1,0 +1,41 @@
+---
+title: "SAMPLE: How a blog post is laid out"
+summary: "Dummy content so you can see the layout. It is shown only on the local development server and is removed from production builds."
+category: architecture
+status: published
+sample: true
+tags: [sample, layout]
+publishedAt: 2000-01-01
+updatedAt: 2000-01-05
+related: [sample-second-article]
+---
+
+This is sample text. A real article would open with the problem, then the context.
+
+## The problem
+
+Describe the situation in plain language. Keep paragraphs short so the reading column stays easy to follow.
+
+## The decision
+
+State the choice you made and the trade-off you accepted with it.
+
+```ts
+export function allowRequest(tokens: number): boolean {
+  return tokens >= 1;
+}
+```
+
+<Callout tone="note">
+  Notes and cautions appear as labelled blocks, never as colour alone.
+</Callout>
+
+<FlowDiagram
+  title="Sample request path"
+  description="Dummy diagram showing how a diagram block looks in an article."
+  steps={["Client", "API", "Service", "Database"]}
+/>
+
+## What I would change
+
+A closing section on lessons, in your own words.
